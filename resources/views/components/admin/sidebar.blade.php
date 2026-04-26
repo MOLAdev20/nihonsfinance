@@ -22,7 +22,7 @@
             <p class="px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Overview</p>
             <ul class="mt-2 space-y-1.5">
                 <li>
-                    <a class="admin-menu-link admin-menu-active" href="#">
+                    <a class="admin-menu-link {{ request()->routeIs('admin.dashboard') ? 'admin-menu-active' : '' }}" href="{{ route('admin.dashboard') }}">
                         <x-admin.icon.grid />
                         <span>Dashboard</span>
                     </a>
@@ -100,6 +100,12 @@
                             <a class="admin-submenu-link" href="#">Staff</a>
                         </li>
                     </ul>
+                </li>
+                <li>
+                    <a class="admin-menu-link {{ request()->routeIs('admin.product.*') ? 'admin-menu-active' : '' }}" href="{{ route('admin.product.index') }}">
+                        <x-admin.icon.folder />
+                        <span>Produk</span>
+                    </a>
                 </li>
                 <li>
                     <a class="admin-menu-link" href="#">
