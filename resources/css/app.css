@@ -9,3 +9,48 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.admin-canvas {
+    background-color: #fff4f4;
+    background-image:
+        radial-gradient(circle at 1px 1px, rgba(244, 63, 94, 0.09) 1px, transparent 0),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 241, 242, 0.9) 100%);
+    background-size: 24px 24px, 100% 100%;
+}
+
+.admin-menu-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    color: #475569;
+    transition: all 180ms ease;
+}
+
+.admin-menu-link:hover {
+    background-color: rgba(254, 205, 211, 0.35);
+    color: #334155;
+}
+
+.admin-menu-active {
+    background-color: rgba(251, 113, 133, 0.12);
+    color: #be123c;
+    font-weight: 600;
+}
+
+.admin-submenu-link {
+    display: inline-flex;
+    width: 100%;
+    border-radius: 0.625rem;
+    padding: 0.45rem 0.625rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    transition: all 180ms ease;
+}
+
+.admin-submenu-link:hover {
+    background-color: rgba(254, 205, 211, 0.25);
+    color: #475569;
+}
