@@ -12,6 +12,11 @@ const loadCustomPageScripts = async (shell) => {
             loader: () => import("../page/category.js"),
             exportName: "initCategoryPage",
         },
+        {
+            selector: "[data-transaction-page]",
+            loader: () => import("../page/transaction.js"),
+            exportName: "initTransactionPage",
+        },
     ];
 
     for (const pageLoader of pageLoaders) {
