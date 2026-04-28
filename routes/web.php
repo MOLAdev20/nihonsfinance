@@ -42,8 +42,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('invoice')->name('invoice.')->group(function () {
         Route::get('/', [InvoiceController::class, 'index'])->name('index');
         Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+        Route::get('/generate-pdf', [InvoiceController::class, 'generatePdf'])->name('generatePdf');
         Route::post('/', [InvoiceController::class, 'store'])->name('store');
         Route::post('/customer', [CustomerController::class, 'store'])->name('customer.store');
+        Route::patch('/{invoice}/status', [InvoiceController::class, 'updateStatus'])->name('updateStatus');
         Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
         Route::get('/{invoice}/edit', [InvoiceController::class, 'edit'])->name('edit');
         Route::put('/{invoice}', [InvoiceController::class, 'update'])->name('update');

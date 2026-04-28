@@ -17,7 +17,9 @@ const toNumber = (value) => {
 };
 
 const normalizeString = (value) => {
-    return String(value ?? "").trim().toLowerCase();
+    return String(value ?? "")
+        .trim()
+        .toLowerCase();
 };
 
 export const initInvoiceFormPage = (shell) => {
@@ -27,7 +29,9 @@ export const initInvoiceFormPage = (shell) => {
     }
 
     const invoiceForm = invoicePage.querySelector("[data-invoice-form]");
-    const issueDateInput = invoicePage.querySelector("[data-invoice-issue-date]");
+    const issueDateInput = invoicePage.querySelector(
+        "[data-invoice-issue-date]",
+    );
     const dueDateInput = invoicePage.querySelector("[data-invoice-due-date]");
     const customerTriggerWrap = invoicePage.querySelector(
         "[data-customer-trigger-wrap]",
@@ -38,7 +42,9 @@ export const initInvoiceFormPage = (shell) => {
     const customerDetailWrap = invoicePage.querySelector(
         "[data-customer-detail-wrap]",
     );
-    const customerIdInput = invoicePage.querySelector("[data-invoice-customer-id]");
+    const customerIdInput = invoicePage.querySelector(
+        "[data-invoice-customer-id]",
+    );
     const customerTriggerButton = invoicePage.querySelector(
         "[data-invoice-customer-trigger]",
     );
@@ -51,13 +57,15 @@ export const initInvoiceFormPage = (shell) => {
     const customerSearchInput = invoicePage.querySelector(
         "[data-invoice-customer-search]",
     );
-    const customerOptionCountElement = invoicePage.querySelector(
-        "[data-invoice-customer-option-count]",
-    );
     const customerOptionsList = invoicePage.querySelector(
         "[data-invoice-customer-options]",
     );
-    const customerDetailName = invoicePage.querySelector("[data-customer-detail-name]");
+    const customerEmptyState = invoicePage.querySelector(
+        "[data-invoice-customer-empty]",
+    );
+    const customerDetailName = invoicePage.querySelector(
+        "[data-customer-detail-name]",
+    );
     const customerDetailEmail = invoicePage.querySelector(
         "[data-customer-detail-email]",
     );
@@ -76,13 +84,21 @@ export const initInvoiceFormPage = (shell) => {
     const openCustomerModalTrigger = invoicePage.querySelector(
         "[data-invoice-open-customer-modal]",
     );
-    const addProductButton = invoicePage.querySelector("[data-invoice-add-product]");
-    const invoiceItemsBody = invoicePage.querySelector("[data-invoice-items-body]");
+    const addProductButton = invoicePage.querySelector(
+        "[data-invoice-add-product]",
+    );
+    const invoiceItemsBody = invoicePage.querySelector(
+        "[data-invoice-items-body]",
+    );
     const totalPaymentElement = invoicePage.querySelector(
         "[data-invoice-total-payment]",
     );
-    const amountDueElement = invoicePage.querySelector("[data-invoice-amount-due]");
-    const addCustomerForm = shell.querySelector("[data-invoice-add-customer-form]");
+    const amountDueElement = invoicePage.querySelector(
+        "[data-invoice-amount-due]",
+    );
+    const addCustomerForm = shell.querySelector(
+        "[data-invoice-add-customer-form]",
+    );
     const addCustomerModal = shell.querySelector("#add-customer-modal");
 
     if (
@@ -95,8 +111,8 @@ export const initInvoiceFormPage = (shell) => {
         !customerSelectedLabel ||
         !customerDropdown ||
         !customerSearchInput ||
-        !customerOptionCountElement ||
         !customerOptionsList ||
+        !customerEmptyState ||
         !customerDetailName ||
         !customerDetailEmail ||
         !customerDetailAddress ||
@@ -113,8 +129,12 @@ export const initInvoiceFormPage = (shell) => {
         return;
     }
 
-    const customerDataElement = invoicePage.querySelector("[data-invoice-customers]");
-    const productDataElement = invoicePage.querySelector("[data-invoice-products]");
+    const customerDataElement = invoicePage.querySelector(
+        "[data-invoice-customers]",
+    );
+    const productDataElement = invoicePage.querySelector(
+        "[data-invoice-products]",
+    );
     const selectedCustomerDataElement = invoicePage.querySelector(
         "[data-invoice-selected-customer]",
     );
@@ -181,11 +201,15 @@ export const initInvoiceFormPage = (shell) => {
         };
     });
 
-    const selectedCustomerData = parseDataCollection(selectedCustomerDataElement);
+    const selectedCustomerData = parseDataCollection(
+        selectedCustomerDataElement,
+    );
     let selectedCustomer = null;
 
     const existingItemIndexes = Array.from(
-        invoiceItemsBody.querySelectorAll("[data-invoice-item-row] [data-invoice-item-product]"),
+        invoiceItemsBody.querySelectorAll(
+            "[data-invoice-item-row] [data-invoice-item-product]",
+        ),
     )
         .map((selectElement) => {
             const inputName = selectElement.getAttribute("name") ?? "";
@@ -244,17 +268,19 @@ export const initInvoiceFormPage = (shell) => {
                 return true;
             }
 
-            return normalizeString(customer.full_name).includes(normalizedQuery);
+            return normalizeString(customer.full_name).includes(
+                normalizedQuery,
+            );
         });
 
-        customerOptionCountElement.textContent = `${filteredCustomers.length} customer ditemukan`;
+        const shouldShowEmptyState =
+            filteredCustomers.length === 0 &&
+            (normalizedQuery.length > 0 || customers.length === 0);
 
-        if (!filteredCustomers.length) {
-            customerOptionsList.innerHTML = `
-                <li class="px-3 py-2 text-xs text-slate-500">
-                    Customer tidak ditemukan.
-                </li>
-            `;
+        customerEmptyState.classList.toggle("hidden", !shouldShowEmptyState);
+
+        if (shouldShowEmptyState) {
+            customerOptionsList.innerHTML = "";
         } else {
             customerOptionsList.innerHTML = filteredCustomers
                 .map((customer) => {
@@ -276,14 +302,12 @@ export const initInvoiceFormPage = (shell) => {
                 })
                 .join("");
         }
-
-        const shouldShowAddNewLink =
-            normalizedQuery.length > 0 && filteredCustomers.length === 0;
-        addNewCustomerLink.classList.toggle("hidden", !shouldShowAddNewLink);
     };
 
     const ensureEmptyState = () => {
-        const hasRows = invoiceItemsBody.querySelector("[data-invoice-item-row]");
+        const hasRows = invoiceItemsBody.querySelector(
+            "[data-invoice-item-row]",
+        );
         if (hasRows) {
             return;
         }
@@ -327,17 +351,27 @@ export const initInvoiceFormPage = (shell) => {
         const productSelect = rowElement.querySelector(
             "[data-invoice-item-product]",
         );
-        const quantityInput = rowElement.querySelector("[data-invoice-item-qty]");
+        const quantityInput = rowElement.querySelector(
+            "[data-invoice-item-qty]",
+        );
         const unitPriceElement = rowElement.querySelector(
             "[data-invoice-item-unit-price]",
         );
-        const totalElement = rowElement.querySelector("[data-invoice-item-total]");
+        const totalElement = rowElement.querySelector(
+            "[data-invoice-item-total]",
+        );
 
-        if (!productSelect || !quantityInput || !unitPriceElement || !totalElement) {
+        if (
+            !productSelect ||
+            !quantityInput ||
+            !unitPriceElement ||
+            !totalElement
+        ) {
             return;
         }
 
-        const selectedOption = productSelect.options[productSelect.selectedIndex];
+        const selectedOption =
+            productSelect.options[productSelect.selectedIndex];
         const unitPrice = toNumber(selectedOption?.dataset.productPrice ?? 0);
         const quantity = Math.max(0, toNumber(quantityInput.value));
         const rowTotal = unitPrice * quantity;
@@ -434,7 +468,9 @@ export const initInvoiceFormPage = (shell) => {
                 rowElement.remove();
                 ensureEmptyState();
 
-                if (!invoiceItemsBody.querySelector("[data-invoice-item-row]")) {
+                if (
+                    !invoiceItemsBody.querySelector("[data-invoice-item-row]")
+                ) {
                     addItemRow();
                 }
 
@@ -520,7 +556,9 @@ export const initInvoiceFormPage = (shell) => {
     });
 
     customerOptionsList.addEventListener("click", (event) => {
-        const optionButton = event.target.closest("[data-invoice-customer-option]");
+        const optionButton = event.target.closest(
+            "[data-invoice-customer-option]",
+        );
         if (!(optionButton instanceof HTMLButtonElement)) {
             return;
         }
@@ -643,10 +681,12 @@ export const initInvoiceFormPage = (shell) => {
     setDefaultDates();
     renderCustomerOptions();
 
-    invoiceItemsBody.querySelectorAll("[data-invoice-item-row]").forEach((rowElement) => {
-        attachItemRowListeners(rowElement);
-        syncRowAmount(rowElement);
-    });
+    invoiceItemsBody
+        .querySelectorAll("[data-invoice-item-row]")
+        .forEach((rowElement) => {
+            attachItemRowListeners(rowElement);
+            syncRowAmount(rowElement);
+        });
 
     if (
         selectedCustomerData &&

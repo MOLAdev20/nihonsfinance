@@ -9,17 +9,70 @@
         @if (session('successMessage'))
             <div class="hidden" data-invoice-success-message="{{ session('successMessage') }}"></div>
         @endif
+        @if (session('errorMessage'))
+            <div class="hidden" data-invoice-error-message="{{ session('errorMessage') }}"></div>
+        @endif
 
         <section class="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm sm:p-8">
             <div class="space-y-8">
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Nihons Finance</p>
-                        <p class="text-sm text-slate-600">Invoice Preview</p>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex gap-4 sm:flex-row sm:items-center">
+                        <img src="/logo.png" width="30px"/>
+                        <h2 class="text-right text-3xl font-black uppercase tracking-[0.2em] text-slate-800 sm:text-4xl">
+                            Invoice
+                            <p class="text-xs font-semibold uppercase tracking-[0.55em] text-slate-500">Nihons Finance</p>
+                        </h2>
                     </div>
-                    <h2 class="text-right text-3xl font-black uppercase tracking-[0.2em] text-slate-800 sm:text-4xl">
-                        Invoice
-                    </h2>
+
+                    <div class="mt-4 w-full max-w-sm space-y-2 sm:mt-0">
+                        <div class="flex items-center justify-end">
+                            <span class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold {{ $currentStatusMeta['badgeClass'] }}">
+                                <span class="h-2 w-2 rounded-full {{ $currentStatusMeta['dotClass'] }}"></span>
+                                {{ $currentStatusMeta['label'] }}
+                            </span>
+                        </div>
+
+                        <form action="{{ route('admin.invoice.updateStatus', $invoice) }}" class="flex items-center justify-end gap-2" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <label class="sr-only" for="invoice-status-select">Status Invoice</label>
+                            <select
+                                class="w-full rounded-full border px-4 py-2 text-sm font-medium outline-none transition focus:ring-2 focus:ring-slate-100 {{ $currentStatusMeta['selectClass'] }}"
+                                id="invoice-status-select"
+                                name="status"
+                            >
+                                @foreach ($statusOptions as $statusOption)
+                                    <option
+                                        @selected(
+                                            $invoice->status === $statusOption['value'] ||
+                                                ($invoice->status === 'partial' && $statusOption['value'] === 'unpaid')
+                                        )
+                                        value="{{ $statusOption['value'] }}"
+                                    >
+                                        {{ $statusOption['label'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button
+                                class="inline-flex shrink-0 items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 transition hover:bg-slate-50"
+                                type="submit"
+                            >
+                                Update
+                            </button>
+                        </form>
+                        @error('status')
+                            <p class="text-right text-xs text-rose-600">{{ $message }}</p>
+                        @enderror
+
+                        <div class="flex justify-end">
+                            <a
+                                class="inline-flex w-full items-center justify-center rounded-full bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-slate-900"
+                                href="{{ route('admin.invoice.generatePdf', ['invoice' => $invoice->id]) }}"
+                            >
+                                Download PDF
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 gap-6 border-t border-rose-100/80 pt-6 lg:grid-cols-2">
@@ -34,7 +87,7 @@
                         <p class="text-sm text-slate-700"><span class="font-medium">Kode:</span> {{ $invoice->invoice_code }}</p>
                         <p class="text-sm text-slate-700"><span class="font-medium">Issue Date:</span> {{ $invoice->issue_date?->format('d/m/Y') }}</p>
                         <p class="text-sm text-slate-700"><span class="font-medium">Due Date:</span> {{ $invoice->due_date?->format('d/m/Y') }}</p>
-                        <p class="text-sm text-slate-700"><span class="font-medium">Status:</span> {{ strtoupper($invoice->status) }}</p>
+                        <p class="text-sm text-slate-700"><span class="font-medium">Status:</span> {{ $currentStatusMeta['label'] }}</p>
                     </div>
                 </div>
 
