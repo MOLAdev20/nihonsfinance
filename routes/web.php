@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +36,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/', [TransactionController::class, 'store'])->name('store');
         Route::put('/{transaction}', [TransactionController::class, 'update'])->name('update');
         Route::delete('/{transaction}', [TransactionController::class, 'destroy'])->name('destroy');
+    });
+
+    // Invoice management routes
+    Route::prefix('invoice')->name('invoice.')->group(function () {
+        Route::get('/', [InvoiceController::class, 'index'])->name('index');
+        Route::post('/customer', [CustomerController::class, 'store'])->name('customer.store');
     });
 });

@@ -17,6 +17,11 @@ const loadCustomPageScripts = async (shell) => {
             loader: () => import("../page/transaction.js"),
             exportName: "initTransactionPage",
         },
+        {
+            selector: "[data-invoice-form-page]",
+            loader: () => import("../page/invoice-form.js"),
+            exportName: "initInvoiceFormPage",
+        },
     ];
 
     for (const pageLoader of pageLoaders) {
