@@ -41,6 +41,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Invoice management routes
     Route::prefix('invoice')->name('invoice.')->group(function () {
         Route::get('/', [InvoiceController::class, 'index'])->name('index');
+        Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+        Route::post('/', [InvoiceController::class, 'store'])->name('store');
         Route::post('/customer', [CustomerController::class, 'store'])->name('customer.store');
+        Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
+        Route::get('/{invoice}/edit', [InvoiceController::class, 'edit'])->name('edit');
+        Route::put('/{invoice}', [InvoiceController::class, 'update'])->name('update');
+        Route::delete('/{invoice}', [InvoiceController::class, 'destroy'])->name('destroy');
     });
 });

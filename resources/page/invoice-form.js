@@ -115,6 +115,9 @@ export const initInvoiceFormPage = (shell) => {
 
     const customerDataElement = invoicePage.querySelector("[data-invoice-customers]");
     const productDataElement = invoicePage.querySelector("[data-invoice-products]");
+    const selectedCustomerDataElement = invoicePage.querySelector(
+        "[data-invoice-selected-customer]",
+    );
     const csrfToken =
         document
             .querySelector('meta[name="csrf-token"]')
@@ -178,8 +181,19 @@ export const initInvoiceFormPage = (shell) => {
         };
     });
 
+    const selectedCustomerData = parseDataCollection(selectedCustomerDataElement);
     let selectedCustomer = null;
-    let itemRowCount = 0;
+
+    const existingItemIndexes = Array.from(
+        invoiceItemsBody.querySelectorAll("[data-invoice-item-row] [data-invoice-item-product]"),
+    )
+        .map((selectElement) => {
+            const inputName = selectElement.getAttribute("name") ?? "";
+            const nameMatch = inputName.match(/^items\[(\d+)\]\[product_id\]$/);
+            return nameMatch ? Number.parseInt(nameMatch[1], 10) : -1;
+        })
+        .filter((value) => Number.isFinite(value) && value >= 0);
+    let itemRowCount = Math.max(-1, ...existingItemIndexes);
 
     const setCustomerState = (state) => {
         customerTriggerWrap.classList.toggle("hidden", state !== "button");
@@ -339,7 +353,7 @@ export const initInvoiceFormPage = (shell) => {
         invoiceItemsBody.querySelector("[data-invoice-empty-row]")?.remove();
         itemRowCount += 1;
 
-        const rowIdentifier = `line-${itemRowCount}`;
+        const rowIdentifier = itemRowCount;
         invoiceItemsBody.insertAdjacentHTML(
             "beforeend",
             `
@@ -387,13 +401,19 @@ export const initInvoiceFormPage = (shell) => {
             return;
         }
 
-        insertedRow
+        attachItemRowListeners(insertedRow);
+
+        syncRowAmount(insertedRow);
+    };
+
+    const attachItemRowListeners = (rowElement) => {
+        rowElement
             .querySelector("[data-invoice-item-product]")
             ?.addEventListener("change", () => {
-                syncRowAmount(insertedRow);
+                syncRowAmount(rowElement);
             });
 
-        insertedRow
+        rowElement
             .querySelector("[data-invoice-item-qty]")
             ?.addEventListener("input", (event) => {
                 const inputElement = event.currentTarget;
@@ -405,18 +425,21 @@ export const initInvoiceFormPage = (shell) => {
                     inputElement.value = "1";
                 }
 
-                syncRowAmount(insertedRow);
+                syncRowAmount(rowElement);
             });
 
-        insertedRow
+        rowElement
             .querySelector("[data-invoice-item-remove]")
             ?.addEventListener("click", () => {
-                insertedRow.remove();
+                rowElement.remove();
                 ensureEmptyState();
+
+                if (!invoiceItemsBody.querySelector("[data-invoice-item-row]")) {
+                    addItemRow();
+                }
+
                 updateInvoiceSummary();
             });
-
-        syncRowAmount(insertedRow);
     };
 
     const closeAddCustomerModal = () => {
@@ -609,12 +632,36 @@ export const initInvoiceFormPage = (shell) => {
         addItemRow();
     });
 
-    invoiceForm.addEventListener("submit", (event) => {
-        event.preventDefault();
+    invoiceForm.addEventListener("submit", () => {
+        invoiceItemsBody
+            .querySelectorAll("[data-invoice-item-row]")
+            .forEach((rowElement) => {
+                syncRowAmount(rowElement);
+            });
     });
 
     setDefaultDates();
     renderCustomerOptions();
-    showAddCustomerButton();
+
+    invoiceItemsBody.querySelectorAll("[data-invoice-item-row]").forEach((rowElement) => {
+        attachItemRowListeners(rowElement);
+        syncRowAmount(rowElement);
+    });
+
+    if (
+        selectedCustomerData &&
+        typeof selectedCustomerData === "object" &&
+        selectedCustomerData.id
+    ) {
+        showCustomerDetail({
+            id: String(selectedCustomerData.id),
+            full_name: String(selectedCustomerData.full_name ?? ""),
+            email: String(selectedCustomerData.email ?? ""),
+            address: String(selectedCustomerData.address ?? ""),
+        });
+    } else {
+        showAddCustomerButton();
+    }
+
     updateInvoiceSummary();
 };
