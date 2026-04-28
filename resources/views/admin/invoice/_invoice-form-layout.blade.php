@@ -57,34 +57,31 @@
 
         <section class="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm sm:p-8">
             <div class="space-y-10">
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
                     <div class="inline-flex items-center gap-3">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-100 text-lg font-black tracking-wide text-rose-700">
-                            NF
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Nihons Finance</p>
-                            <p class="text-sm text-slate-600">Invoice Workspace</p>
+                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl text-lg font-black tracking-wide">
+                            <img src="/logo.png" width="30px"/>
                         </div>
                     </div>
-
-                    <h2 class="text-right text-3xl font-black uppercase tracking-[0.2em] text-slate-800 sm:text-4xl">
-                        Invoice
-                    </h2>
+                    
+                    <div class="text-center">
+                        <h2 class="text-right text-3xl font-black uppercase tracking-[0.2em] text-slate-800 sm:text-4xl">
+                            Invoice
+                        </h2>
+                        <p class="text-xs font-semibold uppercase tracking-[0.55em] text-slate-500">Nihons Finance</p>
+                    </div>
                 </div>
 
                 <div class="border-t border-rose-100/80 pt-8">
                     <div class="grid grid-cols-1 gap-7 lg:grid-cols-2">
                         <div class="space-y-3">
-                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Customer</h3>
-
                             <div class="space-y-3" data-customer-trigger-wrap>
                                 <button
-                                    class="inline-flex items-center justify-center rounded-xl bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-600"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl cursor-pointer bg-rose-500 px-4 py-2 tracking-widest font-medium text-white transition hover:bg-rose-600"
                                     data-invoice-action="activate-customer-picker"
                                     type="button"
                                 >
-                                    Add Customer
+                                    <x-admin.icon.users class="h-5 w-5" />TAMBAH CUSTOMER
                                 </button>
                             </div>
 
@@ -119,19 +116,20 @@
                                         placeholder="Cari customer..."
                                         type="text"
                                     >
-                                    <p class="mb-2 text-xs text-slate-500" data-invoice-customer-option-count>0 customer ditemukan</p>
-
                                     <div class="max-h-52 overflow-y-auto rounded-lg border border-rose-100">
                                         <ul class="divide-y divide-rose-100 text-sm text-slate-700" data-invoice-customer-options></ul>
                                     </div>
 
-                                    <a
-                                        class="mt-2 hidden text-xs font-medium lowercase tracking-wide text-rose-600 underline decoration-rose-200 underline-offset-2 hover:text-rose-700"
-                                        data-invoice-action="open-add-customer-modal"
-                                        href="#"
-                                    >
-                                        add-new-customer
-                                    </a>
+                                    <div class="mt-2 hidden rounded-lg border border-rose-100 bg-rose-50/40 p-3" data-invoice-customer-empty>
+                                        <p class="text-xs font-medium text-slate-600">Customer tidak ditemukan</p>
+                                        <a
+                                            class="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-rose-700 underline decoration-rose-200 underline-offset-2 hover:text-rose-800"
+                                            data-invoice-action="open-add-customer-modal"
+                                            href="#"
+                                        >
+                                            ➕ Buat Customer Baru
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -168,7 +166,6 @@
                         </div>
 
                         <div class="space-y-3">
-                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Invoice Meta</h3>
                             <div class="space-y-3">
                                 <label class="flex flex-col gap-1 text-sm text-slate-600">
                                     <span class="font-medium">Kode Invoice</span>
@@ -330,15 +327,8 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="border-t border-rose-100/80 pt-8">
                     <div class="mx-auto flex w-full max-w-3xl items-center gap-3">
-                        <a
-                            class="inline-flex items-center justify-center rounded-xl border border-rose-100 px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-rose-50"
-                            href="{{ route('admin.invoice.index') }}"
-                        >
-                            Kembali
-                        </a>
                         <button
                             class="w-full rounded-xl bg-rose-500 px-4 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-rose-600"
                             type="submit"

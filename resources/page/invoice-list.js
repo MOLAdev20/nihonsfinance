@@ -25,6 +25,24 @@ export const initInvoiceListPage = (shell) => {
         bell.launch();
     }
 
+    const errorMessageElement = listPage.querySelector(
+        "[data-invoice-error-message]",
+    );
+    const errorMessage = errorMessageElement?.getAttribute(
+        "data-invoice-error-message",
+    );
+
+    if (errorMessage) {
+        const bell = new Bell(
+            {
+                title: "Gagal",
+                description: errorMessage,
+            },
+            "error",
+        );
+        bell.launch();
+    }
+
     listPage.querySelectorAll("[data-invoice-delete-form]").forEach((formElement) => {
         formElement.addEventListener("submit", (event) => {
             const confirmed = window.confirm(

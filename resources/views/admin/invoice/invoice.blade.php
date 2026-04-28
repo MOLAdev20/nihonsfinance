@@ -42,6 +42,24 @@
                     </thead>
                     <tbody class="divide-y divide-rose-100 text-sm text-slate-700">
                         @forelse ($invoices as $invoice)
+                            @php
+                                $statusClasses = [
+                                    'draft' => 'border-slate-200 bg-slate-100 text-slate-700',
+                                    'unpaid' => 'border-blue-200 bg-blue-50 text-blue-700',
+                                    'partial' => 'border-blue-200 bg-blue-50 text-blue-700',
+                                    'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+                                    'canceled' => 'border-rose-200 bg-rose-50 text-rose-700',
+                                ];
+                                $statusLabels = [
+                                    'draft' => 'Draft',
+                                    'unpaid' => 'Belum Dibayar',
+                                    'partial' => 'Belum Dibayar',
+                                    'paid' => 'Dibayar',
+                                    'canceled' => 'Dibatalkan',
+                                ];
+                                $statusClass = $statusClasses[$invoice->status] ?? 'border-slate-200 bg-slate-100 text-slate-700';
+                                $statusLabel = $statusLabels[$invoice->status] ?? ucfirst((string) $invoice->status);
+                            @endphp
                             <tr
                                 class="cursor-pointer transition hover:bg-rose-50/30"
                                 data-invoice-row-link="{{ route('admin.invoice.show', $invoice) }}"
@@ -53,8 +71,8 @@
                                 <td class="whitespace-nowrap px-4 py-3">{{ $invoice->lines_count }}</td>
                                 <td class="whitespace-nowrap px-4 py-3">Rp {{ number_format((float) $invoice->total_amount, 2, ',', '.') }}</td>
                                 <td class="whitespace-nowrap px-4 py-3">
-                                    <span class="rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium uppercase text-rose-700">
-                                        {{ $invoice->status }}
+                                    <span class="rounded-full border px-2.5 py-1 text-xs font-medium uppercase {{ $statusClass }}">
+                                        {{ $statusLabel }}
                                     </span>
                                 </td>
                                 <td class="whitespace-nowrap px-4 py-3">
