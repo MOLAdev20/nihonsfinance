@@ -70,6 +70,12 @@
                         <span>Budget</span>
                     </a>
                 </li>
+                <li>
+                    <a class="admin-menu-link {{ request()->routeIs('admin.invoice.*') ? 'admin-menu-active' : '' }}" href="{{ route('admin.invoice.index') }}">
+                        <x-admin.icon.document />
+                        <span>Invoice</span>
+                    </a>
+                </li>
             </ul>
         </section>
 
