@@ -27,6 +27,11 @@ const loadCustomPageScripts = async (shell) => {
             loader: () => import("../page/invoice-list.js"),
             exportName: "initInvoiceListPage",
         },
+        {
+            selector: "[data-dashboard-page]",
+            loader: () => import("../page/dashboard.js"),
+            exportName: "initDashboardPage",
+        },
     ];
 
     for (const pageLoader of pageLoaders) {
