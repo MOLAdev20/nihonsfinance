@@ -1,5 +1,9 @@
 import "./bootstrap";
 
+import Alpine from "alpinejs";
+
+window.Alpine = Alpine;
+
 const loadCustomPageScripts = async (shell) => {
     const pageLoaders = [
         {
@@ -11,6 +15,11 @@ const loadCustomPageScripts = async (shell) => {
             selector: "[data-category-page]",
             loader: () => import("../page/category.js"),
             exportName: "initCategoryPage",
+        },
+        {
+            selector: "[data-customer-page]",
+            loader: () => import("../page/customer.js"),
+            exportName: "initCustomerPage",
         },
         {
             selector: "[data-transaction-page]",
@@ -207,3 +216,5 @@ if (document.readyState === "loading") {
 } else {
     onReady();
 }
+
+Alpine.start();

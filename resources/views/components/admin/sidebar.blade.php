@@ -27,12 +27,6 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li>
-                    <a class="admin-menu-link" href="#">
-                        <x-admin.icon.chart />
-                        <span>Ringkasan</span>
-                    </a>
-                </li>
             </ul>
         </section>
 
@@ -40,34 +34,9 @@
             <p class="px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Keuangan</p>
             <ul class="mt-2 space-y-1.5">
                 <li>
-                    <button
-                        aria-controls="submenu-keuangan"
-                        aria-expanded="false"
-                        class="admin-menu-link w-full justify-between"
-                        data-submenu-toggle
-                        type="button"
-                    >
-                        <span class="inline-flex items-center gap-2.5">
-                            <x-admin.icon.wallet />
-                            <span>Transaksi</span>
-                        </span>
-                        <svg class="h-4 w-4 transition-transform duration-300" data-submenu-chevron fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    <ul class="admin-submenu mt-1.5 ml-2 max-h-0 overflow-hidden border-l border-rose-100 pl-4 opacity-0 transition-all duration-300" id="submenu-keuangan">
-                        <li>
-                            <a class="admin-submenu-link" href="#">Pemasukan</a>
-                        </li>
-                        <li>
-                            <a class="admin-submenu-link" href="#">Pengeluaran</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="admin-menu-link" href="#">
+                    <a class="admin-menu-link {{ request()->routeIs('admin.transaction.index') ? 'admin-menu-active' : '' }}" href="{{ route('admin.transaction.index') }}">
                         <x-admin.icon.card />
-                        <span>Budget</span>
+                        <span>Transaksi</span>
                     </a>
                 </li>
                 <li>
@@ -83,40 +52,21 @@
             <p class="px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Master Data</p>
             <ul class="mt-2 space-y-1.5">
                 <li>
-                    <button
-                        aria-controls="submenu-master"
-                        aria-expanded="false"
-                        class="admin-menu-link w-full justify-between"
-                        data-submenu-toggle
-                        type="button"
-                    >
-                        <span class="inline-flex items-center gap-2.5">
-                            <x-admin.icon.users />
-                            <span>Pengguna</span>
-                        </span>
-                        <svg class="h-4 w-4 transition-transform duration-300" data-submenu-chevron fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    <ul class="admin-submenu mt-1.5 ml-2 max-h-0 overflow-hidden border-l border-rose-100 pl-4 opacity-0 transition-all duration-300" id="submenu-master">
-                        <li>
-                            <a class="admin-submenu-link" href="#">Admin</a>
-                        </li>
-                        <li>
-                            <a class="admin-submenu-link" href="#">Staff</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
                     <a class="admin-menu-link {{ request()->routeIs('admin.product.*') ? 'admin-menu-active' : '' }}" href="{{ route('admin.product.index') }}">
                         <x-admin.icon.folder />
                         <span>Produk</span>
                     </a>
                 </li>
                 <li>
-                    <a class="admin-menu-link" href="#">
+                    <a class="admin-menu-link {{ request()->routeIs('admin.category.*') ? 'admin-menu-active' : '' }}" href="{{ route('admin.category.index') }}">
                         <x-admin.icon.folder />
                         <span>Kategori</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="admin-menu-link {{ request()->routeIs('admin.customer.*') ? 'admin-menu-active' : '' }}" href="{{ route('admin.customer.index') }}">
+                        <x-admin.icon.folder />
+                        <span>Master Pelanggan</span>
                     </a>
                 </li>
             </ul>
